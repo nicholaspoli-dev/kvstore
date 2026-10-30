@@ -15,17 +15,20 @@ public class KvStore {
         this.path = path;
     }
 
-    public void put(String key, String value) throws IOException {
-        // scrivere su un file "data.db" una riga nel formato
-        // "P chiave=valore"
-
+    private void appendLine(String line) throws IOException {
         Files.write(
                 path,
-                List.of("P " + key + "=" + value),
+                List.of(line),
                 StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE,
                 StandardOpenOption.APPEND
         );
+    }
+
+    public void put(String key, String value) throws IOException {
+        // scrivere su un file "data.db" una riga nel formato
+        // "P chiave=valore"
+        appendLine("P " + key + "=" + value);
     }
 
     public String get(String key) throws IOException {
@@ -43,12 +46,23 @@ public class KvStore {
 
         for(int i = 0; i < lines.size(); i++) {
             String[] slices = lines.get(i).split(" ", 2);
-            String[] pair = slices[1].split("=", 2);
 
-            if (pair[0].equals(key)) {
-                value = pair[1];
+            if (slices[0].equals("P")) {
+                String[] pair = slices[1].split("=", 2);
+
+                if (pair[0].equals(key)) {
+                    value = pair[1];
+                }
+            }
+
+            if (slices[0].equals("D") && slices[1].equals(key)) {
+                value = null;
             }
         }
         return value;
+    }
+
+    public void delete(String key) throws IOException {
+        appendLine("D " + key);
     }
 }

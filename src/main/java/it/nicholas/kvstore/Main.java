@@ -11,10 +11,11 @@ public class Main {
         KvStore k2 = new KvStore(Path.of("data.db"));
         k2.put("nome", "Mario");
 
-        System.out.println("[" + k.get("nome") + "]");
-        System.out.println("[" + (k.get("inesistente")) + "]");
-
         k.put("nota", "");
-        System.out.println("[" + k.get("nota") + "]");
+
+        k.put("nome", "Giorgio");
+        System.out.println("[" + k.get("nome")+ "]");
+        k.delete("nome");
+        System.out.println("[" + k.get("nome") + "]");
     }
 }
