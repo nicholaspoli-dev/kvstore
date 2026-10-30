@@ -7,7 +7,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         KvStore k = new KvStore(Path.of("data.db"));
         k.put("nome", "Luca");
+
         KvStore k2 = new KvStore(Path.of("data.db"));
         k2.put("nome", "Mario");
+
+        System.out.println("[" + k.get("nome") + "]");
+        System.out.println("[" + (k.get("inesistente")) + "]");
+
+        k.put("nota", "");
+        System.out.println("[" + k.get("nota") + "]");
     }
 }
